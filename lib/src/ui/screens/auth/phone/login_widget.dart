@@ -6,22 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:sim23/src/bloc/provider/block_provider.dart';
-import 'package:sim23/src/repository/remote/api/models/base_response.dart';
-import 'package:sim23/src/resources/colors.dart';
-import 'package:sim23/src/resources/const.dart';
-import 'package:sim23/src/extensions/parser.dart';
-import 'package:sim23/src/resources/drawables.dart';
-import 'package:sim23/src/resources/strings.dart';
-import 'package:sim23/src/router/app_routing_names.dart';
-import 'package:sim23/src/tools/mail_tool.dart';
-import 'package:sim23/src/tools/phone_input_formatter.dart';
-import 'package:sim23/src/ui/screens/auth/otp/otp_screen.dart';
-import 'package:sim23/src/ui/screens/auth/phone/login_bloc.dart';
-import 'package:sim23/src/ui/screens/auth/phone/login_screen.dart';
-import 'package:sim23/src/ui/widgets/confirmation_dialog.dart';
+import 'package:damilk_app/src/bloc/provider/block_provider.dart';
+import 'package:damilk_app/src/repository/remote/api/models/base_response.dart';
+import 'package:damilk_app/src/resources/colors.dart';
+import 'package:damilk_app/src/resources/const.dart';
+import 'package:damilk_app/src/extensions/parser.dart';
+import 'package:damilk_app/src/resources/drawables.dart';
+import 'package:damilk_app/src/resources/strings.dart';
+import 'package:damilk_app/src/router/app_routing_names.dart';
+import 'package:damilk_app/src/tools/phone_input_formatter.dart';
+import 'package:damilk_app/src/ui/screens/auth/otp/otp_screen.dart';
+import 'package:damilk_app/src/ui/screens/auth/phone/login_bloc.dart';
+import 'package:damilk_app/src/ui/screens/auth/phone/login_screen.dart';
+import 'package:damilk_app/src/ui/widgets/confirmation_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:sim23/src/extensions/widgets.dart';
+import 'package:damilk_app/src/extensions/widgets.dart';
 
 class LoginWidget extends State<LoginScreen> {
   BaseResponse errorResponse;
@@ -320,7 +319,7 @@ class LoginWidget extends State<LoginScreen> {
               onTopClicked: isNetworkError
                   ? null
                   : () => {
-                        {MailTool.preSendSupportMail()}
+//                        {MailTool.preSendSupportMail()}
                       },
               onBottomClicked: () => {
                 //ignore

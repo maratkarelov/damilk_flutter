@@ -2,18 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:sim23/src/bloc/provider/block_provider.dart';
-import 'package:sim23/src/resources/colors.dart';
-import 'package:sim23/src/resources/const.dart';
-import 'package:sim23/src/resources/drawables.dart';
-import 'package:sim23/src/resources/strings.dart';
-import 'package:sim23/src/router/app_routing_names.dart';
-import 'package:sim23/src/tools/mail_tool.dart';
-import 'package:sim23/src/ui/screens/auth/congratulation/congratulation_screen.dart';
-import 'package:sim23/src/ui/screens/auth/otp/otp_bloc.dart';
-import 'package:sim23/src/ui/screens/auth/otp/otp_screen.dart';
-import 'package:sim23/src/extensions/parser.dart';
-import 'package:sim23/src/ui/widgets/confirmation_dialog.dart';
+import 'package:damilk_app/src/bloc/provider/block_provider.dart';
+import 'package:damilk_app/src/resources/colors.dart';
+import 'package:damilk_app/src/resources/const.dart';
+import 'package:damilk_app/src/resources/drawables.dart';
+import 'package:damilk_app/src/resources/strings.dart';
+import 'package:damilk_app/src/router/app_routing_names.dart';
+import 'package:damilk_app/src/ui/screens/auth/otp/otp_bloc.dart';
+import 'package:damilk_app/src/ui/screens/auth/otp/otp_screen.dart';
+import 'package:damilk_app/src/extensions/parser.dart';
+import 'package:damilk_app/src/ui/widgets/confirmation_dialog.dart';
 
 class OtpWidget extends State<OtpScreen> {
   final OtpScreenArguments _arguments;
@@ -270,9 +268,9 @@ class OtpWidget extends State<OtpScreen> {
         if (lastName != null && lastName.isNotEmpty) {
           name += " " + lastName;
         }
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            AppRoutes.CONGRATULATION_SCREEN, (Route<dynamic> route) => false,
-            arguments: CongratulationArguments(name, false));
+//        Navigator.of(context).pushNamedAndRemoveUntil(
+//            AppRoutes.CONGRATULATION_SCREEN, (Route<dynamic> route) => false,
+//            arguments: CongratulationArguments(name, false));
       } else {
         Navigator.of(context).pushNamedAndRemoveUntil(
             AppRoutes.REGISTRATION_SCREEN, (Route<dynamic> route) => false);
@@ -324,7 +322,7 @@ class OtpWidget extends State<OtpScreen> {
               description: response.message,
               topButtonText: topButtonText,
               bottomButtonText: bottomButtonText,
-              onTopClicked: () => {MailTool.preSendSupportMail()},
+//              onTopClicked: () => {MailTool.preSendSupportMail()},
               onBottomClicked: () => {
                 //ignore
               },

@@ -1,7 +1,7 @@
-import 'package:sim23/src/bloc/base_bloc.dart';
-import 'package:sim23/src/repository/remote/api/models/alone/city_model.dart';
-import 'package:sim23/src/repository/remote/api/models/base_response.dart';
-import 'package:sim23/src/repository/sim23_repository.dart';
+import 'package:damilk_app/src/bloc/base_bloc.dart';
+import 'package:damilk_app/src/repository/remote/api/models/alone/city_model.dart';
+import 'package:damilk_app/src/repository/remote/api/models/base_response.dart';
+import 'package:damilk_app/src/repository/sim23_repository.dart';
 
 class RegistrationBloc extends BaseBloc {
   final _repository = Sim23Repository();
