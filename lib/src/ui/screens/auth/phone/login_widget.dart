@@ -311,6 +311,7 @@ class LoginWidget extends State<LoginScreen> {
     PhoneCodeSent codeSent =
         (String verificationId, [int forceResendingToken]) async {
       _bloc.changeVerificationId(verificationId);
+      _codeSent();
       print(
           'Please check your phone for the verification code. $verificationId');
     };
@@ -376,6 +377,10 @@ class LoginWidget extends State<LoginScreen> {
   }
 
   _authCompleted() {
+    Navigator.of(context).pushNamed(AppRoutes.DASHBOARD_SCREEN);
+  }
+
+  _codeSent() {
     var formattedPhone =
         Strings.get(context, Strings.UKRAINIAN_COUNTRY_CODE) +
             " " +

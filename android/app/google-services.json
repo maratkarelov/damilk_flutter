@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "458124533103",
-    "firebase_url": "https://damilk-46844.firebaseio.com",
-    "project_id": "damilk-46844",
-    "storage_bucket": "damilk-46844.appspot.com"
+    "project_number": "195946702895",
+    "firebase_url": "https://testflutter-2df71.firebaseio.com",
+    "project_id": "testflutter-2df71",
+    "storage_bucket": "testflutter-2df71.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:458124533103:android:64906ffb8b5498caae5c9a",
+        "mobilesdk_app_id": "1:195946702895:android:2473ae6da9721f1c7ffeda",
         "android_client_info": {
           "package_name": "com.example.firebase_auth"
         }
       },
       "oauth_client": [
         {
-          "client_id": "458124533103-ld0le3qbcafb1t238defd9lhicuq6ddm.apps.googleusercontent.com",
+          "client_id": "195946702895-864aa7s8jv7c2b5cf3il1nb7kk5v2hdq.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB4Lyt2uMXI3xADjVWl15iZjS33pMZQZMI"
+          "current_key": "AIzaSyC4bCKtnb3E6JUAOZRJfw0lGgA3IX0M_kY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "458124533103-ld0le3qbcafb1t238defd9lhicuq6ddm.apps.googleusercontent.com",
+              "client_id": "195946702895-864aa7s8jv7c2b5cf3il1nb7kk5v2hdq.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -37,51 +37,27 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:458124533103:android:2b7522cd1b89841eae5c9a",
+        "mobilesdk_app_id": "1:195946702895:android:38507de6dcc3ae9a7ffeda",
         "android_client_info": {
-          "package_name": "ua.com.damilk"
+          "package_name": "com.example.passwordless_demo"
         }
       },
       "oauth_client": [
         {
-          "client_id": "458124533103-g4rdrs5v0bd06uon9pc8goa84hcspmqk.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "ua.com.damilk",
-            "certificate_hash": "9fd58f9a9d3c74ba852ae5ac6b0e9fd13fbd8338"
-          }
-        },
-        {
-          "client_id": "458124533103-4qqlugsq62ece2f3g8l14dfka3mhqfjs.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "ua.com.damilk",
-            "certificate_hash": "9661773839ab75862c98f0be53559be749ba35ff"
-          }
-        },
-        {
-          "client_id": "458124533103-cupgs9odien3v834caask4ka08l22t95.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "ua.com.damilk",
-            "certificate_hash": "c1bd834afd26489992f6201ea51498f4cb0f27ce"
-          }
-        },
-        {
-          "client_id": "458124533103-ld0le3qbcafb1t238defd9lhicuq6ddm.apps.googleusercontent.com",
+          "client_id": "195946702895-864aa7s8jv7c2b5cf3il1nb7kk5v2hdq.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB4Lyt2uMXI3xADjVWl15iZjS33pMZQZMI"
+          "current_key": "AIzaSyC4bCKtnb3E6JUAOZRJfw0lGgA3IX0M_kY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "458124533103-ld0le3qbcafb1t238defd9lhicuq6ddm.apps.googleusercontent.com",
+              "client_id": "195946702895-864aa7s8jv7c2b5cf3il1nb7kk5v2hdq.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

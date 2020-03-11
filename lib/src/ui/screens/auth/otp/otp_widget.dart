@@ -38,22 +38,47 @@ class OtpWidget extends State<OtpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.brand_grey,
-      body: BlocProvider<OtpBloc>(
-        child: StreamBuilder(
-          stream: _bloc.progressStream,
-          initialData: false,
-          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-            return ModalProgressHUD(
-              child: _buildScreenContent(),
-              inAsyncCall: snapshot.data,
-            );
-          },
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: new Scaffold(
+        backgroundColor: AppColors.brand_grey,
+        body: BlocProvider<OtpBloc>(
+          child: StreamBuilder(
+            stream: _bloc.progressStream,
+            initialData: false,
+            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+              return ModalProgressHUD(
+                child: _buildScreenContent(),
+                inAsyncCall: snapshot.data,
+              );
+            },
+          ),
+          block: _bloc,
         ),
-        block: _bloc,
-      ),
+      )
     );
+  }
+
+  Future<bool> _onBackPressed() {
+    return showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Are you sure?'),
+            content: new Text('Do you want to exit an App'),
+            actions: <Widget>[
+              new GestureDetector(
+                onTap: () => Navigator.of(context).pop(false),
+                child: Text("NO"),
+              ),
+              SizedBox(height: 16),
+              new GestureDetector(
+                onTap: () => Navigator.of(context).pop(true),
+                child: Text("YES"),
+              ),
+            ],
+          ),
+        ) ??
+        false;
   }
 
   @override
@@ -261,10 +286,10 @@ class OtpWidget extends State<OtpScreen> {
         verificationId: _arguments.verificationId, smsCode: otp);
 
     await _bloc.signInWithCredential(credential).then((result) =>
-    // You could potentially find out if the user is new
-    // and if so, pass that info on, to maybe do a tutorial
-    // if (result.additionalUserInfo.isNewUser)
-    _authCompleted());
+        // You could potentially find out if the user is new
+        // and if so, pass that info on, to maybe do a tutorial
+        // if (result.additionalUserInfo.isNewUser)
+        _authCompleted());
   }
 
   void _resendOtp() async {
@@ -307,6 +332,4 @@ class OtpWidget extends State<OtpScreen> {
     Navigator.of(context).pushNamedAndRemoveUntil(
         AppRoutes.REGISTRATION_SCREEN, (Route<dynamic> route) => false);
   }
-
 }
-
