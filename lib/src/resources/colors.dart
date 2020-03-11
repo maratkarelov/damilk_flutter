@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 //e.g. 20 % opacity = 33 hex appender (0x33.....)
 
 class AppColors {
+  static const Color primary = Color(0xff674CF5);
   static const Color white = Color(0xffffffff);
   static const Color white_60 = Color(0x99ffffff);
   static const Color yellow = Color(0xFFFECD32);
@@ -14,7 +15,7 @@ class AppColors {
   static const Color transparent = Color(0x000a1533);
   static const Color solid_black = Color(0xFF2C303E);
   static const Color solid_black_60 = Color(0x992C303E);
-  static const Color bg_light_grey = Color(0xFFF6F7F9);
+  static const Color bg_light_grey = Color(0xFFF1F1F6);
   static const Color bg_light_grey_20 = Color(0x33F6F7F9);
   static const Color brand_yellow = Color(0xFFFECD32);
   static const Color brand_grey = Color(0xFF394049);

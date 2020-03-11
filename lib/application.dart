@@ -15,7 +15,7 @@ class Application {
   ];
 
   final List<String> supportedLanguagesCodes = [
-    "uk",
+    "ru",
   ];
 
   //returns the list of supported Locales

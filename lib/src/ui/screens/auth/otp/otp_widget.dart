@@ -41,7 +41,7 @@ class OtpWidget extends State<OtpScreen> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: new Scaffold(
-        backgroundColor: AppColors.brand_grey,
+        backgroundColor: AppColors.bg_light_grey,
         body: BlocProvider<OtpBloc>(
           child: StreamBuilder(
             stream: _bloc.progressStream,
@@ -94,17 +94,17 @@ class OtpWidget extends State<OtpScreen> {
       child: Stack(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(bottom: 88.dp()),
+            padding: EdgeInsets.only(top: 88.dp()),
             child: ClipRRect(
               borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(16.dp()),
-                  bottomRight: Radius.circular(16.dp())),
+                  topLeft: Radius.circular(16.dp()),
+                  topRight: Radius.circular(16.dp())),
               child: Container(
-                color: AppColors.bg_light_grey,
+                color: AppColors.white,
               ),
             ),
           ),
-          Drawables.getImage(Drawables.RECTANGLE_BACKGROUND_SMALL),
+//          Drawables.getImage(Drawables.RECTANGLE_BACKGROUND_SMALL),
           GestureDetector(
             onTap: () => {Navigator.pop(context)},
             child: Container(
@@ -141,11 +141,10 @@ class OtpWidget extends State<OtpScreen> {
       ),
       Padding(
         padding: EdgeInsets.only(left: 16.dp(), right: 16.dp(), top: 40.dp()),
-        child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(8.dp())),
+        child: ClipRect(
           child: Container(
             width: MediaQuery.of(context).size.width,
-            color: AppColors.white,
+//            color: AppColors.white,
             padding: EdgeInsets.only(
                 left: 24.dp(), right: 24.dp(), bottom: 24.dp(), top: 19.dp()),
             child: Column(
@@ -191,13 +190,13 @@ class OtpWidget extends State<OtpScreen> {
                   ),
                 ),
                 Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: Alignment.center,
                   child: Padding(
                     padding: EdgeInsets.only(top: 16.dp(), bottom: 4.dp()),
                     child: Text(
                       Strings.get(context,
                           Strings.CONFIRMATION_CODE_WITH_SMS_SEND_ON_NUMBER),
-                      textAlign: TextAlign.left,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                           color: AppColors.solid_black_60,
                           fontFamily: Const.FONT_FAMILY_NUNITO,
@@ -207,14 +206,14 @@ class OtpWidget extends State<OtpScreen> {
                   ),
                 ),
                 Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: Alignment.center,
                   child: Text(
                     _arguments.formattedPhone,
-                    textAlign: TextAlign.left,
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         color: AppColors.solid_black,
                         fontFamily: Const.FONT_FAMILY_NUNITO,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
                         fontSize: 16.sp()),
                   ),
                 ),

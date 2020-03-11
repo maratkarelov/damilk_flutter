@@ -54,7 +54,7 @@ class LoginWidget extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.brand_grey,
+      backgroundColor: AppColors.bg_light_grey,
       body: StreamBuilder(
         stream: _bloc.progressStream,
         initialData: false,
@@ -74,27 +74,27 @@ class LoginWidget extends State<LoginScreen> {
       child: Stack(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(bottom: 88.dp()),
+            padding: EdgeInsets.only(top: 88.dp()),
             child: ClipRRect(
               borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(16.dp()),
-                  bottomRight: Radius.circular(16.dp())),
+                  topLeft: Radius.circular(16.dp()),
+                  topRight: Radius.circular(16.dp())),
               child: Container(
                 color: AppColors.bg_light_grey,
               ),
             ),
           ),
-          Drawables.getImage(Drawables.RECTANGLE_BACKGROUND_SMALL),
+          //  Drawables.getImage(Drawables.RECTANGLE_BACKGROUND_SMALL),
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 55.dp()),
+              padding: EdgeInsets.only(top: 40.dp()),
               child: Column(
                 children: _buildPhoneInputWidget(),
               ),
             ),
           ),
-          Align(alignment: Alignment.bottomCenter, child: _buildTermsOfUse()),
+//          Align(alignment: Alignment.bottomCenter, child: _buildTermsOfUse()),
           Align(alignment: Alignment.bottomCenter, child: _buildBottomButton())
         ],
       ),
@@ -113,8 +113,7 @@ class LoginWidget extends State<LoginScreen> {
       ),
       Padding(
         padding: EdgeInsets.only(left: 16.dp(), right: 16.dp(), top: 40.dp()),
-        child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(8.dp())),
+        child: ClipRect(
           child: Container(
             width: MediaQuery.of(context).size.width,
             color: AppColors.white,
@@ -132,7 +131,7 @@ class LoginWidget extends State<LoginScreen> {
                         style: TextStyle(
                             color: AppColors.solid_black,
                             fontWeight: FontWeight.w700,
-                            fontSize: 24.sp(),
+                            fontSize: 18.sp(),
                             fontFamily: Const.FONT_FAMILY_NUNITO),
                       ),
                       Expanded(
@@ -169,7 +168,7 @@ class LoginWidget extends State<LoginScreen> {
                             keyboardType: TextInputType.phone,
                             style: TextStyle(
                                 color: AppColors.solid_black,
-                                fontSize: 24.sp(),
+                                fontSize: 18.sp(),
                                 fontWeight: FontWeight.w700,
                                 fontFamily: Const.FONT_FAMILY_NUNITO),
                             textAlignVertical: TextAlignVertical.center,
@@ -192,6 +191,7 @@ class LoginWidget extends State<LoginScreen> {
                 ),
                 Text(
                   Strings.get(context, Strings.PHONE_INPUT_HINT),
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                       color: AppColors.solid_black,
                       fontFamily: Const.FONT_FAMILY_NUNITO,
@@ -255,8 +255,8 @@ class LoginWidget extends State<LoginScreen> {
     return RaisedButton(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.dp()),
-          side: BorderSide(color: AppColors.yellow)),
-      color: AppColors.yellow,
+          side: BorderSide(color: AppColors.primary)),
+      color: AppColors.primary,
       onPressed: () {
         var formattedPhone =
             Strings.get(context, Strings.UKRAINIAN_COUNTRY_CODE) +
@@ -268,7 +268,7 @@ class LoginWidget extends State<LoginScreen> {
         Strings.get(context, Strings.GET_SMS_NOTIFICATION),
         textAlign: TextAlign.center,
         style: TextStyle(
-            color: AppColors.solid_black,
+            color: AppColors.white,
             fontSize: 14.sp(),
             fontFamily: Const.FONT_FAMILY_NUNITO,
             fontWeight: FontWeight.w600),
@@ -277,19 +277,30 @@ class LoginWidget extends State<LoginScreen> {
   }
 
   Widget _createPhoneHint() {
-    return Center(
+    return RaisedButton(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.dp()),
+          side: BorderSide(color: AppColors.bg_light_grey)),
+      color: AppColors.bg_light_grey,
+      onPressed: () {
+        var formattedPhone =
+            Strings.get(context, Strings.UKRAINIAN_COUNTRY_CODE) +
+                " " +
+                _inputController.text;
+        _authenticateUserWithPhone(formattedPhone);
+      },
       child: Text(
-        Strings.get(context, Strings.ENTER_PHONE_NUMBER),
+        Strings.get(context, Strings.GET_SMS_NOTIFICATION),
         textAlign: TextAlign.center,
         style: TextStyle(
-            color: AppColors.white_60,
+            color: AppColors.solid_black_60,
             fontSize: 14.sp(),
             fontFamily: Const.FONT_FAMILY_NUNITO,
             fontWeight: FontWeight.w600),
       ),
     );
-  }
 
+  }
 
   void _authenticateUserWithPhone(String formattedPhone) {
     PhoneVerificationFailed verificationFailed = (AuthException authException) {
@@ -322,12 +333,8 @@ class LoginWidget extends State<LoginScreen> {
     };
 
 //    _bloc.changeAuthStatus(AuthStatus.smsSent);
-    _bloc.verifyPhoneNumber(
-        formattedPhone,
-        codeAutoRetrievalTimeout,
-        codeSent,
-        verificationCompleted,
-        verificationFailed);
+    _bloc.verifyPhoneNumber(formattedPhone, codeAutoRetrievalTimeout, codeSent,
+        verificationCompleted, verificationFailed);
   }
 
   void _requestOtp(String formattedPhone) async {
@@ -337,7 +344,8 @@ class LoginWidget extends State<LoginScreen> {
     if (response.isSuccessful() || response.code == 429) {
       final timeToNext = response.data.timeToNext;
       Navigator.of(context).pushNamed(AppRoutes.OTP_SCREEN,
-          arguments: OtpScreenArguments(formattedPhone, _bloc.getVerificationId));
+          arguments:
+              OtpScreenArguments(formattedPhone, _bloc.getVerificationId));
     } else {
       String topButtonText = Strings.get(context, Strings.SUPPORT);
       String bottomButtonText = Strings.get(context, Strings.LATER);
@@ -381,10 +389,9 @@ class LoginWidget extends State<LoginScreen> {
   }
 
   _codeSent() {
-    var formattedPhone =
-        Strings.get(context, Strings.UKRAINIAN_COUNTRY_CODE) +
-            " " +
-            _inputController.text;
+    var formattedPhone = Strings.get(context, Strings.UKRAINIAN_COUNTRY_CODE) +
+        " " +
+        _inputController.text;
 
     Navigator.of(context).pushNamed(AppRoutes.OTP_SCREEN,
         arguments: OtpScreenArguments(formattedPhone, _bloc.getVerificationId));
