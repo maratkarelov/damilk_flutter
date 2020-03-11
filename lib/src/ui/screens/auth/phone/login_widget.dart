@@ -5,6 +5,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:damilk_app/src/bloc/provider/block_provider.dart';
 import 'package:damilk_app/src/repository/remote/api/models/base_response.dart';
@@ -260,7 +262,7 @@ class LoginWidget extends State<LoginScreen> {
             Strings.get(context, Strings.UKRAINIAN_COUNTRY_CODE) +
                 " " +
                 _inputController.text;
-        _requestOtp(formattedPhone);
+        _authenticateUserWithPhone(formattedPhone);
       },
       child: Text(
         Strings.get(context, Strings.GET_SMS_NOTIFICATION),
@@ -288,6 +290,45 @@ class LoginWidget extends State<LoginScreen> {
     );
   }
 
+
+  void _authenticateUserWithPhone(String formattedPhone) {
+    PhoneVerificationFailed verificationFailed = (AuthException authException) {
+//      _bloc.changeAuthStatus(AuthStatus.phoneAuth);
+//      _showSnackBar(Constants.verificationFailed);
+      //TODO: show error to user.
+      print(
+          'Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
+    };
+
+    PhoneVerificationCompleted verificationCompleted =
+        (AuthCredential phoneAuthCredential) {
+      _bloc
+          .signInWithCredential(phoneAuthCredential)
+          .then((result) => _authCompleted());
+      print('Received phone auth credential: $phoneAuthCredential');
+    };
+
+    PhoneCodeSent codeSent =
+        (String verificationId, [int forceResendingToken]) async {
+      _bloc.changeVerificationId(verificationId);
+      print(
+          'Please check your phone for the verification code. $verificationId');
+    };
+
+    PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
+        (String verificationId) {
+      print("auto retrieval timeout");
+    };
+
+//    _bloc.changeAuthStatus(AuthStatus.smsSent);
+    _bloc.verifyPhoneNumber(
+        formattedPhone,
+        codeAutoRetrievalTimeout,
+        codeSent,
+        verificationCompleted,
+        verificationFailed);
+  }
+
   void _requestOtp(String formattedPhone) async {
     FocusScope.of(context).requestFocus(FocusNode()); //hide keyboard
 
@@ -295,7 +336,7 @@ class LoginWidget extends State<LoginScreen> {
     if (response.isSuccessful() || response.code == 429) {
       final timeToNext = response.data.timeToNext;
       Navigator.of(context).pushNamed(AppRoutes.OTP_SCREEN,
-          arguments: OtpScreenArguments(formattedPhone, timeToNext));
+          arguments: OtpScreenArguments(formattedPhone, _bloc.getVerificationId));
     } else {
       String topButtonText = Strings.get(context, Strings.SUPPORT);
       String bottomButtonText = Strings.get(context, Strings.LATER);
@@ -327,6 +368,21 @@ class LoginWidget extends State<LoginScreen> {
             );
           });
     }
+  }
+
+  _showSnackBar(String error) {
+    final snackBar = SnackBar(content: Text(error));
+    Scaffold.of(context).showSnackBar(snackBar);
+  }
+
+  _authCompleted() {
+    var formattedPhone =
+        Strings.get(context, Strings.UKRAINIAN_COUNTRY_CODE) +
+            " " +
+            _inputController.text;
+
+    Navigator.of(context).pushNamed(AppRoutes.OTP_SCREEN,
+        arguments: OtpScreenArguments(formattedPhone, _bloc.getVerificationId));
   }
 
   @override

@@ -14,7 +14,7 @@ class OtpScreen extends StatefulWidget {
 
 class OtpScreenArguments {
   final String formattedPhone;
-  final int timeToNext;
+  final String verificationId;
 
-  OtpScreenArguments(this.formattedPhone, this.timeToNext);
+  OtpScreenArguments(this.formattedPhone, this.verificationId);
 }

@@ -1,26 +1,23 @@
-import 'dart:convert';
-
+import 'package:damilk_app/src/repository/remote/api/damilk_api_provider.dart';
+import 'package:damilk_app/src/repository/remote/api/models/alone/city_model.dart';
+import 'package:damilk_app/src/repository/remote/api/models/base_response.dart';
+import 'package:damilk_app/src/repository/remote/api/models/request_otp_response.dart';
+import 'package:damilk_app/src/resources/const.dart';
 import 'package:dio/dio.dart';
-import 'package:sim23/src/repository/remote/api/models/alone/city_model.dart';
-import 'package:sim23/src/repository/remote/api/models/base_response.dart';
-import 'package:sim23/src/repository/remote/api/models/client/client_model.dart';
-import 'package:sim23/src/repository/remote/api/models/request_otp_response.dart';
-import 'package:sim23/src/repository/remote/api/sim23_api_provider.dart';
-import 'package:sim23/src/resources/const.dart';
 
 import 'api/models/client/client_auth_model.dart';
 
-class Sim23RemoteRepository {
-  final _apiProvider = Sim23ApiProvider();
+class DamilkRemoteRepository {
+  final _apiProvider = DamilkApiProvider();
 
-  static final Sim23RemoteRepository _instance =
-      Sim23RemoteRepository._internal();
+  static final DamilkRemoteRepository _instance =
+      DamilkRemoteRepository._internal();
 
-  factory Sim23RemoteRepository() {
+  factory DamilkRemoteRepository() {
     return _instance;
   }
 
-  Sim23RemoteRepository._internal();
+  DamilkRemoteRepository._internal();
 
   Future<BaseResponse<RequestOtpResponse>> requestOtp(String phone) async {
     BaseResponse<RequestOtpResponse> convertedResponse;

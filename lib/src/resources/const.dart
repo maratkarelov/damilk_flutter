@@ -3,7 +3,7 @@ class Const {
   static const MAIN_TUTORIAL_COMPLETED = "main_tutorial_completed";
   static const NETWORK_CONNECTION = 0;
   static const FORMATTED_PHONE_MAX_LENGTH = 12;
-  static const OTP_MAX_LENGTH = 4;
+  static const OTP_MAX_LENGTH = 6;
   static const TIMER_DELAY = 60;
 
   static const LATINIC_REGEXP = "[a-zA-Z]+";
@@ -12,5 +12,4 @@ class Const {
   static const JWT_TOKEN = "token";
   static const JWT_EXPIRED_AT = "jwt_expired_at";
   static const IS_REGISTERED = "is_registered";
-  static const SUPPORT_MAIL = "askme@sim23.ua";
 }

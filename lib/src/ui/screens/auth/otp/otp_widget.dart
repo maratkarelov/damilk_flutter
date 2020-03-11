@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:damilk_app/src/bloc/provider/block_provider.dart';
 import 'package:damilk_app/src/resources/colors.dart';
@@ -8,6 +10,7 @@ import 'package:damilk_app/src/resources/const.dart';
 import 'package:damilk_app/src/resources/drawables.dart';
 import 'package:damilk_app/src/resources/strings.dart';
 import 'package:damilk_app/src/router/app_routing_names.dart';
+import 'package:damilk_app/src/ui/screens/auth/phone/login_bloc.dart';
 import 'package:damilk_app/src/ui/screens/auth/otp/otp_bloc.dart';
 import 'package:damilk_app/src/ui/screens/auth/otp/otp_screen.dart';
 import 'package:damilk_app/src/extensions/parser.dart';
@@ -28,7 +31,6 @@ class OtpWidget extends State<OtpScreen> {
     super.initState();
     _inputController = TextEditingController(text: "");
     _bloc = OtpBloc();
-    _bloc.runTimer(_arguments.timeToNext);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FocusScope.of(context).requestFocus(_inputFocus);
     });
@@ -254,45 +256,15 @@ class OtpWidget extends State<OtpScreen> {
 
   void _login() async {
     FocusScope.of(context).requestFocus(FocusNode()); //hide keyboard
-
-    final phone = _arguments.formattedPhone;
     final otp = _inputController.text;
-    final response = await _bloc.login(phone, otp);
+    AuthCredential credential = PhoneAuthProvider.getCredential(
+        verificationId: _arguments.verificationId, smsCode: otp);
 
-    if (response.isSuccessful()) {
-      final clientModel = response.data.clientModel;
-      final registered = clientModel.firstName.isNotEmpty;
-      if (registered) {
-        String name = clientModel.firstName;
-        String lastName = clientModel.lastName;
-        if (lastName != null && lastName.isNotEmpty) {
-          name += " " + lastName;
-        }
-//        Navigator.of(context).pushNamedAndRemoveUntil(
-//            AppRoutes.CONGRATULATION_SCREEN, (Route<dynamic> route) => false,
-//            arguments: CongratulationArguments(name, false));
-      } else {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            AppRoutes.REGISTRATION_SCREEN, (Route<dynamic> route) => false);
-      }
-    } else {
-      String bottomButtonText = Strings.get(context, Strings.GOOD);
-      bool isNetworkError = response.code == Const.NETWORK_CONNECTION;
-
-      if (isNetworkError) {
-        response.title = Strings.get(context, Strings.ERROR_HAPPEN);
-        response.message = Strings.get(context, Strings.CHECK_CONNECTION);
-      }
-
-      showModalBottomSheet(
-          context: context,
-          builder: (context) {
-            return ConfirmationDialog(
-                title: response.title,
-                description: response.message,
-                bottomButtonText: bottomButtonText);
-          });
-    }
+    await _bloc.signInWithCredential(credential).then((result) =>
+    // You could potentially find out if the user is new
+    // and if so, pass that info on, to maybe do a tutorial
+    // if (result.additionalUserInfo.isNewUser)
+    _authCompleted());
   }
 
   void _resendOtp() async {
@@ -330,4 +302,11 @@ class OtpWidget extends State<OtpScreen> {
           });
     }
   }
+
+  _authCompleted() {
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        AppRoutes.REGISTRATION_SCREEN, (Route<dynamic> route) => false);
+  }
+
 }
+

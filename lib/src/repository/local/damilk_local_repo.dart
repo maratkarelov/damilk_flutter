@@ -5,16 +5,16 @@ import 'package:damilk_app/src/repository/remote/api/models/client/client_auth_m
 import 'package:damilk_app/src/resources/const.dart';
 import 'app_database.dart';
 
-class Sim23LocalRepo {
-  static final Sim23LocalRepo _instance = Sim23LocalRepo._internal();
+class DamilkLocalRepo {
+  static final DamilkLocalRepo _instance = DamilkLocalRepo._internal();
 
   AppDatabase database;
 
-  factory Sim23LocalRepo() {
+  factory DamilkLocalRepo() {
     return _instance;
   }
 
-  Sim23LocalRepo._internal() {
+  DamilkLocalRepo._internal() {
     initialDatabase();
   }
 

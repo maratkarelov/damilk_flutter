@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/widgets.dart';
-import 'package:sim23/src/repository/remote/api/models/base_response.dart';
-import 'package:sim23/src/repository/sim23_repository.dart';
-import 'package:sim23/src/router/app_routing_names.dart';
+import 'package:damilk_app/src/repository/remote/api/models/base_response.dart';
+import 'package:damilk_app/src/repository/damilk_repository.dart';
+import 'package:damilk_app/src/router/app_routing_names.dart';
 
 class AuthVerifierInterceptor {
   static final AuthVerifierInterceptor _instance =
@@ -19,7 +19,7 @@ class AuthVerifierInterceptor {
 
   Future<void> verify(Response<dynamic> response) async {
     if (response.statusCode == 401) {
-      Sim23Repository().clearRepository();
+      DamilkRepository().clearRepository();
 
       navigatorKey.currentState.pushNamedAndRemoveUntil(
           AppRoutes.LOGIN_SCREEN, (route) => false,

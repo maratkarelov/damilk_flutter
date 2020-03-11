@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sim23/src/tools/localization/app_translator.dart';
+import 'package:damilk_app/src/tools/localization/app_translator.dart';
 
 class Strings {
   static const String TUTORIAL_TITLE_ = "tutorial_title_";

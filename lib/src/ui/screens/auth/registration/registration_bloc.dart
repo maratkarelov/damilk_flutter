@@ -1,10 +1,10 @@
 import 'package:damilk_app/src/bloc/base_bloc.dart';
 import 'package:damilk_app/src/repository/remote/api/models/alone/city_model.dart';
 import 'package:damilk_app/src/repository/remote/api/models/base_response.dart';
-import 'package:damilk_app/src/repository/sim23_repository.dart';
+import 'package:damilk_app/src/repository/damilk_repository.dart';
 
 class RegistrationBloc extends BaseBloc {
-  final _repository = Sim23Repository();
+  final _repository = DamilkRepository();
   BaseResponse<List<CityModel>> citiesResponse;
 
   Future<BaseResponse<List<CityModel>>> loadCitiesIfEmpty() async {

@@ -2,21 +2,21 @@
 import 'package:dio/dio.dart';
 import 'package:logging/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sim23/src/repository/remote/api/auth_verifier_interceptor.dart';
-import 'package:sim23/src/resources/const.dart';
+import 'package:damilk_app/src/repository/remote/api/auth_verifier_interceptor.dart';
+import 'package:damilk_app/src/resources/const.dart';
 
-class Sim23ApiProvider {
-  static const BASE_URL = "https://sim23.branderstudio.com/api/v1/";
+class DamilkApiProvider {
+  static const BASE_URL = "https://api.mobile.damilk.com.ua/api/v1/";
 
   final Dio _dio = Dio();
-  final Logger _logger = Logger("Sim23ApiProvider");
-  static final Sim23ApiProvider _instance = Sim23ApiProvider._internal();
+  final Logger _logger = Logger("DamilkApiProvider");
+  static final DamilkApiProvider _instance = DamilkApiProvider._internal();
 
-  Sim23ApiProvider._internal() {
+  DamilkApiProvider._internal() {
     _setupInterceptors();
   }
 
-  factory Sim23ApiProvider() {
+  factory DamilkApiProvider() {
     return _instance;
   }
 
@@ -28,8 +28,8 @@ class Sim23ApiProvider {
 
   Future<Response> login(String phone, String otpCode) {
     var formattedPhone = phone.replaceAll(" ", "");
-    return _dio.post(BASE_URL + "client/auth",
-        data: {"phone": formattedPhone, "code": otpCode});
+    return _dio.post(BASE_URL + "user/entry/firebase",
+        data: {"token": formattedPhone, "code": otpCode});
   }
 
   Future<Response> updateProfile(Map<String, dynamic> profile) {

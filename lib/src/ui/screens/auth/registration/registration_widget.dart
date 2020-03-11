@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:damilk_app/src/bloc/provider/block_provider.dart';
 import 'package:damilk_app/src/repository/remote/api/models/alone/city_model.dart';
@@ -15,7 +14,7 @@ import 'package:damilk_app/src/ui/screens/auth/registration/registration_bloc.da
 import 'package:damilk_app/src/ui/screens/auth/registration/registration_screen.dart';
 import 'package:damilk_app/src/extensions/parser.dart';
 import 'package:damilk_app/src/extensions/widgets.dart';
-import 'package:damilk_app/src/ui/widgets/city_picker_dialog.dart';
+//import 'package:damilk_app/src/ui/widgets/city_picker_dialog.dart';
 
 class RegistrationWidget extends State<RegistrationScreen> {
   RegistrationBloc _bloc;
@@ -32,13 +31,13 @@ class RegistrationWidget extends State<RegistrationScreen> {
     _nameFocusNode = FocusNode();
     _bloc = RegistrationBloc();
 
-    KeyboardVisibilityNotification().addNewListener(
-      onChange: (bool visible) {
-        setState(() {
-          _showBackgroundRectangle = !visible;
-        });
-      },
-    );
+//    KeyboardVisibilityNotification().addNewListener(
+//      onChange: (bool visible) {
+//        setState(() {
+//          _showBackgroundRectangle = !visible;
+//        });
+//      },
+//    );
   }
 
   @override
@@ -180,7 +179,7 @@ class RegistrationWidget extends State<RegistrationScreen> {
       showModalBottomSheet(
           context: context,
           builder: (context) {
-            return CityPickerDialog(citiesResponse.data, _onCityPicked);
+//            return CityPickerDialog(citiesResponse.data, _onCityPicked);
           });
     } else {
       handleFailure(citiesResponse);
@@ -245,9 +244,9 @@ class RegistrationWidget extends State<RegistrationScreen> {
         await _bloc.register(_nameInputController.text.trim(), _pickedCity);
 
     if (response.isSuccessful()) {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          AppRoutes.CONGRATULATION_SCREEN, (Route route) => false,
-          arguments: CongratulationArguments(_nameInputController.text, true));
+//      Navigator.of(context).pushNamedAndRemoveUntil(
+//          AppRoutes.CONGRATULATION_SCREEN, (Route route) => false,
+//          arguments: CongratulationArguments(_nameInputController.text, true));
     } else {
       handleFailure(response);
     }
