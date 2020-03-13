@@ -5,13 +5,13 @@ import 'package:damilk_app/src/repository/remote/api/models/request_otp_response
 import 'package:damilk_app/src/resources/const.dart';
 import 'package:dio/dio.dart';
 
-import 'api/models/client/client_auth_model.dart';
+import 'api/models/client/user_model.dart';
 
 class DamilkRemoteRepository {
   final _apiProvider = DamilkApiProvider();
 
   static final DamilkRemoteRepository _instance =
-      DamilkRemoteRepository._internal();
+  DamilkRemoteRepository._internal();
 
   factory DamilkRemoteRepository() {
     return _instance;
@@ -29,7 +29,7 @@ class DamilkRemoteRepository {
         convertedResponse = BaseResponse(code: Const.NETWORK_CONNECTION);
       } else if (statusCode == 202 || statusCode == 429) {
         convertedResponse = BaseResponse.fromJson(statusCode, response.data,
-            (json) => RequestOtpResponse.fromJson(json));
+                (json) => RequestOtpResponse.fromJson(json));
       } else {
         convertedResponse =
             BaseResponse.fromErrorJson(statusCode, response.data);
@@ -42,18 +42,18 @@ class DamilkRemoteRepository {
     return Future.value(convertedResponse);
   }
 
-  Future<BaseResponse<ClientAuthModel>> login(
-      String phone, String otpCode) async {
-    BaseResponse<ClientAuthModel> convertedResponse;
-
+  Future<BaseResponse<UserModel>> login(String token) async {
+    BaseResponse<UserModel> convertedResponse;
     try {
-      final response = await _apiProvider.login(phone, otpCode);
+      final response = await _apiProvider.login(token);
+      String jwt = response.data["data"]["token"];
+      convertedResponse.message = jwt;
       int statusCode = response.statusCode;
       if (statusCode == 0) {
         convertedResponse = BaseResponse(code: Const.NETWORK_CONNECTION);
       } else if (statusCode == 200) {
         convertedResponse = BaseResponse.fromJson(statusCode, response.data,
-            (json) => ClientAuthModel.fromJson(json));
+                (json) => UserModel.fromJson(json));
       } else {
         convertedResponse =
             BaseResponse.fromErrorJson(statusCode, response.data);

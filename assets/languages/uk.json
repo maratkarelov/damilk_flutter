@@ -21,6 +21,7 @@
   "code_from_sms": "Код из СМС",
   "confirmation_code_with_sms_send_on_number": "Код підтвердження з SMS надісланий на номер",
   "send_again": "Відправити повторно",
+  "pre_send_again": "Еще одно SMS будет доступно через",
   "support": "Служба підтримки",
   "later": "Пізнішер",
   "error_happen": "Сталася помилка",

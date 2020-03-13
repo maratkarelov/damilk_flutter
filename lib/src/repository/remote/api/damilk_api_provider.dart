@@ -26,10 +26,9 @@ class DamilkApiProvider {
         data: {"phone": formattedPhone});
   }
 
-  Future<Response> login(String phone, String otpCode) {
-    var formattedPhone = phone.replaceAll(" ", "");
+  Future<Response> login(String token) {
     return _dio.post(BASE_URL + "user/entry/firebase",
-        data: {"token": formattedPhone, "code": otpCode});
+        data: {"token": token});
   }
 
   Future<Response> updateProfile(Map<String, dynamic> profile) {

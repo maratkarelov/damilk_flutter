@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:damilk_app/src/repository/remote/api/models/client/user_model.dart';
+import 'package:damilk_app/src/repository/remote/api/models/base_response.dart';
 import 'package:damilk_app/src/bloc/base_bloc.dart';
 import 'package:damilk_app/src/repository/damilk_repository.dart';
-import 'package:damilk_app/src/repository/remote/api/models/base_response.dart';
-import 'package:damilk_app/src/repository/remote/api/models/request_otp_response.dart';
 import 'package:rxdart/rxdart.dart';
 
-class LoginBloc extends BaseBloc {
+class AuthBloc extends BaseBloc {
   final _repository = DamilkRepository();
   final _verificationId = BehaviorSubject<String>();
 
@@ -35,10 +34,12 @@ class LoginBloc extends BaseBloc {
     return _repository.signInWithCredential(credential);
   }
 
-  Future<BaseResponse<RequestOtpResponse>> requestOtp(String phone) async {
+  Future<BaseResponse<UserModel>> login(String token) async {
     showProgress();
-    final result = await _repository.requestOtp(phone);
+    final result = await _repository.login(token);
     hideProgress();
     return Future.value(result);
   }
+
+
 }

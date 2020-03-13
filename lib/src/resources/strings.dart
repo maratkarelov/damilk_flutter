@@ -20,6 +20,7 @@ class Strings {
   static const String CONFIRMATION_CODE_WITH_SMS_SEND_ON_NUMBER =
       "confirmation_code_with_sms_send_on_number";
   static const String SEND_AGAIN = "send_again";
+  static const String PRE_SEND_AGAIN = "pre_send_again";
   static const String SUPPORT = "support";
   static const String LATER = "later";
   static const String ERROR_HAPPEN = "error_happen";

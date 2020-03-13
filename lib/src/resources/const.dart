@@ -4,7 +4,7 @@ class Const {
   static const NETWORK_CONNECTION = 0;
   static const FORMATTED_PHONE_MAX_LENGTH = 12;
   static const OTP_MAX_LENGTH = 6;
-  static const TIMER_DELAY = 60;
+  static const TIMER_DELAY = 5;
 
   static const LATINIC_REGEXP = "[a-zA-Z]+";
   static const EMAIL_ENABLED_SYMBOLS_SET = "[0-9a-zA-Z._@%+-]";

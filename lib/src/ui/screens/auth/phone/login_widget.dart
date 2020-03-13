@@ -27,7 +27,7 @@ import 'package:damilk_app/src/extensions/widgets.dart';
 class LoginWidget extends State<LoginScreen> {
   BaseResponse errorResponse;
 
-  LoginBloc _bloc;
+  AuthBloc _bloc;
   bool _phoneEntered = false;
   TextEditingController _inputController;
   final _inputFocus = FocusNode();
@@ -40,7 +40,7 @@ class LoginWidget extends State<LoginScreen> {
   void initState() {
     super.initState();
     _inputController = TextEditingController(text: "");
-    _bloc = LoginBloc();
+    _bloc = AuthBloc();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FocusScope.of(context).requestFocus(_inputFocus);
@@ -69,7 +69,7 @@ class LoginWidget extends State<LoginScreen> {
   }
 
   Widget _buildScreenContent() {
-    return BlocProvider<LoginBloc>(
+    return BlocProvider<AuthBloc>(
       block: _bloc,
       child: Stack(
         children: <Widget>[
@@ -80,7 +80,7 @@ class LoginWidget extends State<LoginScreen> {
                   topLeft: Radius.circular(16.dp()),
                   topRight: Radius.circular(16.dp())),
               child: Container(
-                color: AppColors.bg_light_grey,
+                color: AppColors.white,
               ),
             ),
           ),
@@ -304,9 +304,15 @@ class LoginWidget extends State<LoginScreen> {
 
   void _authenticateUserWithPhone(String formattedPhone) {
     PhoneVerificationFailed verificationFailed = (AuthException authException) {
-//      _bloc.changeAuthStatus(AuthStatus.phoneAuth);
-//      _showSnackBar(Constants.verificationFailed);
-      //TODO: show error to user.
+      showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return ConfirmationDialog(
+              title: Strings.get(context, Strings.ERROR_HAPPEN),
+              description: authException.message,
+              bottomButtonText: Strings.get(context, Strings.GOOD),
+            );
+          });
       print(
           'Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
     };
@@ -332,56 +338,8 @@ class LoginWidget extends State<LoginScreen> {
       print("auto retrieval timeout");
     };
 
-//    _bloc.changeAuthStatus(AuthStatus.smsSent);
     _bloc.verifyPhoneNumber(formattedPhone, codeAutoRetrievalTimeout, codeSent,
         verificationCompleted, verificationFailed);
-  }
-
-  void _requestOtp(String formattedPhone) async {
-    FocusScope.of(context).requestFocus(FocusNode()); //hide keyboard
-
-    final response = await _bloc.requestOtp(formattedPhone);
-    if (response.isSuccessful() || response.code == 429) {
-      final timeToNext = response.data.timeToNext;
-      Navigator.of(context).pushNamed(AppRoutes.OTP_SCREEN,
-          arguments:
-              OtpScreenArguments(formattedPhone, _bloc.getVerificationId));
-    } else {
-      String topButtonText = Strings.get(context, Strings.SUPPORT);
-      String bottomButtonText = Strings.get(context, Strings.LATER);
-      bool isNetworkError = response.code == Const.NETWORK_CONNECTION;
-
-      if (isNetworkError) {
-        response.title = Strings.get(context, Strings.ERROR_HAPPEN);
-        response.message = Strings.get(context, Strings.CHECK_CONNECTION);
-        topButtonText = "";
-        bottomButtonText = Strings.get(context, Strings.GOOD);
-      }
-
-      showModalBottomSheet(
-          context: context,
-          builder: (context) {
-            return ConfirmationDialog(
-              title: response.title,
-              description: response.message,
-              topButtonText: topButtonText,
-              bottomButtonText: bottomButtonText,
-              onTopClicked: isNetworkError
-                  ? null
-                  : () => {
-//                        {MailTool.preSendSupportMail()}
-                      },
-              onBottomClicked: () => {
-                //ignore
-              },
-            );
-          });
-    }
-  }
-
-  _showSnackBar(String error) {
-    final snackBar = SnackBar(content: Text(error));
-    Scaffold.of(context).showSnackBar(snackBar);
   }
 
   _authCompleted() {

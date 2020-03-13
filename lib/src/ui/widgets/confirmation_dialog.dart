@@ -95,7 +95,7 @@ class ConfirmationDialog extends StatelessWidget {
           child: RaisedButton(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.dp()),
-                side: BorderSide(color: AppColors.yellow)),
+                side: BorderSide(color: AppColors.primary)),
             color: AppColors.yellow,
             onPressed: () => {
               Navigator.pop(context),

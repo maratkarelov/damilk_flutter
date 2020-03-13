@@ -1,7 +1,7 @@
 import 'package:floor/floor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:damilk_app/src/repository/remote/api/models/base_response.dart';
-import 'package:damilk_app/src/repository/remote/api/models/client/client_auth_model.dart';
+import 'package:damilk_app/src/repository/remote/api/models/client/user_model.dart';
 import 'package:damilk_app/src/resources/const.dart';
 import 'app_database.dart';
 
@@ -18,13 +18,10 @@ class DamilkLocalRepo {
     initialDatabase();
   }
 
-  void storeUser(ClientAuthModel clientAuthModel) async {
+  void storeUser(String jwt, bool isActivated) async {
     final sharedPrefs = await SharedPreferences.getInstance();
-    sharedPrefs.setString(Const.JWT_TOKEN, clientAuthModel.tokenModel.token);
-    sharedPrefs.setString(
-        Const.JWT_EXPIRED_AT, clientAuthModel.tokenModel.expiresAt);
-    sharedPrefs.setBool(
-        Const.IS_REGISTERED, clientAuthModel.clientModel.firstName.isNotEmpty);
+    sharedPrefs.setString(Const.JWT_TOKEN, jwt);
+    sharedPrefs.setBool(Const.IS_REGISTERED, isActivated);
   }
 
   static List<Migration> createMigrations() {
@@ -55,7 +52,7 @@ class DamilkLocalRepo {
     return Future.value(database);
   }
 
-  void onUserRegistered(BaseResponse response) async{
+  void onUserRegistered(BaseResponse response) async {
     final preferences = await SharedPreferences.getInstance();
     preferences.setBool(Const.IS_REGISTERED, response.isSuccessful());
   }

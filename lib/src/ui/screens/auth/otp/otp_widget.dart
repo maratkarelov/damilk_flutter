@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -31,6 +33,7 @@ class OtpWidget extends State<OtpScreen> {
     super.initState();
     _inputController = TextEditingController(text: "");
     _bloc = OtpBloc();
+    _bloc.runTimer(Const.TIMER_DELAY);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FocusScope.of(context).requestFocus(_inputFocus);
     });
@@ -39,46 +42,45 @@ class OtpWidget extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: _onBackPressed,
-      child: new Scaffold(
-        backgroundColor: AppColors.bg_light_grey,
-        body: BlocProvider<OtpBloc>(
-          child: StreamBuilder(
-            stream: _bloc.progressStream,
-            initialData: false,
-            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-              return ModalProgressHUD(
-                child: _buildScreenContent(),
-                inAsyncCall: snapshot.data,
-              );
-            },
+        onWillPop: _onBackPressed,
+        child: new Scaffold(
+          backgroundColor: AppColors.bg_light_grey,
+          body: BlocProvider<OtpBloc>(
+            child: StreamBuilder(
+              stream: _bloc.progressStream,
+              initialData: false,
+              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                return ModalProgressHUD(
+                  child: _buildScreenContent(),
+                  inAsyncCall: snapshot.data,
+                );
+              },
+            ),
+            block: _bloc,
           ),
-          block: _bloc,
-        ),
-      )
-    );
+        ));
   }
 
   Future<bool> _onBackPressed() {
-    return showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            title: new Text('Are you sure?'),
-            content: new Text('Do you want to exit an App'),
-            actions: <Widget>[
-              new GestureDetector(
-                onTap: () => Navigator.of(context).pop(false),
-                child: Text("NO"),
-              ),
-              SizedBox(height: 16),
-              new GestureDetector(
-                onTap: () => Navigator.of(context).pop(true),
-                child: Text("YES"),
-              ),
-            ],
-          ),
-        ) ??
-        false;
+//    return showDialog(
+//          context: context,
+//          builder: (context) => new AlertDialog(
+//            title: new Text('Are you sure?'),
+//            content: new Text('Do you want to exit an App'),
+//            actions: <Widget>[
+//              new GestureDetector(
+//                onTap: () => Navigator.of(context).pop(false),
+//                child: Text("NO"),
+//              ),
+//              SizedBox(height: 16),
+//              new GestureDetector(
+//                onTap: () => Navigator.of(context).pop(true),
+//                child: Text("YES"),
+//              ),
+//            ],
+//          ),
+//        ) ??
+    false;
   }
 
   @override
@@ -117,7 +119,7 @@ class OtpWidget extends State<OtpScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: EdgeInsets.only(top: 55.dp()),
+              padding: EdgeInsets.only(top: 40.dp()),
               child: Column(
                 children: _buildOtpInputWidget(),
               ),
@@ -242,16 +244,54 @@ class OtpWidget extends State<OtpScreen> {
 
   Widget _createTimerHint(int time, bool enabled) {
     var text;
+    var textTimer;
     if (enabled) {
       text = Strings.get(context, Strings.SEND_AGAIN);
     } else {
-      text = time.toTimeString();
+      text = Strings.get(context, Strings.PRE_SEND_AGAIN);
+      textTimer = time.toTimeString();
     }
-    return GestureDetector(
-      onTap: () => {
-        if (enabled) {_resendOtp()}
-      },
-      child: Container(
+    if (enabled) {
+      return GestureDetector(
+        onTap: () => {
+          if (enabled) {_authenticateUserWithPhone()}
+        },
+        child: Container(
+          padding: EdgeInsets.all(16.dp()),
+          color: Colors.transparent,
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(right: 10.dp()),
+                  child: Text(
+                    text,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: AppColors.solid_black,
+                        fontSize: 14.sp(),
+                        fontFamily: Const.FONT_FAMILY_NUNITO,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+//                Text(
+//                  textTimer,
+//                  textAlign: TextAlign.center,
+//                  style: TextStyle(
+//                      color: AppColors.solid_black,
+//                      fontSize: 14.sp(),
+//                      fontFamily: Const.FONT_FAMILY_NUNITO,
+//                      fontWeight: FontWeight.w600),
+//                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+    } else {
+      return Container(
         padding: EdgeInsets.all(16.dp()),
         color: Colors.transparent,
         child: Center(
@@ -260,13 +300,21 @@ class OtpWidget extends State<OtpScreen> {
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.only(right: 10.dp()),
-                child: Drawables.getImage(Drawables.IC_REPEAT),
+                child: Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: AppColors.solid_black,
+                      fontSize: 14.sp(),
+                      fontFamily: Const.FONT_FAMILY_NUNITO,
+                      fontWeight: FontWeight.w600),
+                ),
               ),
               Text(
-                text,
+                textTimer,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    color: AppColors.white_60,
+                    color: AppColors.solid_black,
                     fontSize: 14.sp(),
                     fontFamily: Const.FONT_FAMILY_NUNITO,
                     fontWeight: FontWeight.w600),
@@ -274,8 +322,8 @@ class OtpWidget extends State<OtpScreen> {
             ],
           ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   void _login() async {
@@ -291,44 +339,48 @@ class OtpWidget extends State<OtpScreen> {
         _authCompleted());
   }
 
-  void _resendOtp() async {
-    FocusScope.of(context).requestFocus(FocusNode()); //hide keyboard
-
-    final response = await _bloc.requestOtp(_arguments.formattedPhone);
-    if (response.isSuccessful() || response.code == 429) {
-      final timeToNext = response.data.timeToNext;
-      _bloc.runTimer(timeToNext);
-    } else {
-      String topButtonText = Strings.get(context, Strings.SUPPORT);
-      String bottomButtonText = Strings.get(context, Strings.LATER);
-      bool isNetworkError = response.code == Const.NETWORK_CONNECTION;
-
-      if (isNetworkError) {
-        response.title = Strings.get(context, Strings.ERROR_HAPPEN);
-        response.message = Strings.get(context, Strings.CHECK_CONNECTION);
-        topButtonText = "";
-        bottomButtonText = Strings.get(context, Strings.GOOD);
-      }
-
+  void _authenticateUserWithPhone() {
+    PhoneVerificationFailed verificationFailed = (AuthException authException) {
       showModalBottomSheet(
           context: context,
           builder: (context) {
             return ConfirmationDialog(
-              title: response.title,
-              description: response.message,
-              topButtonText: topButtonText,
-              bottomButtonText: bottomButtonText,
-//              onTopClicked: () => {MailTool.preSendSupportMail()},
-              onBottomClicked: () => {
-                //ignore
-              },
+              title: Strings.get(context, Strings.ERROR_HAPPEN),
+              description: authException.message,
+              bottomButtonText: Strings.get(context, Strings.GOOD),
             );
           });
-    }
-  }
+      print(
+          'Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
+    };
 
+    PhoneVerificationCompleted verificationCompleted =
+        (AuthCredential phoneAuthCredential) {
+      _bloc
+          .signInWithCredential(phoneAuthCredential)
+          .then((result) => _authCompleted());
+      print('Received phone auth credential: $phoneAuthCredential');
+    };
+
+    PhoneCodeSent codeSent =
+        (String verificationId, [int forceResendingToken]) async {
+      _bloc.changeVerificationId(verificationId);
+      _bloc.runTimer(Const.TIMER_DELAY);
+      print(
+          'Please check your phone for the verification code. $verificationId');
+    };
+
+    PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
+        (String verificationId) {
+      print("auto retrieval timeout");
+    };
+
+    _bloc.verifyPhoneNumber(_arguments.formattedPhone, codeAutoRetrievalTimeout, codeSent,
+        verificationCompleted, verificationFailed);
+  }
   _authCompleted() {
     Navigator.of(context).pushNamedAndRemoveUntil(
         AppRoutes.REGISTRATION_SCREEN, (Route<dynamic> route) => false);
   }
+
 }

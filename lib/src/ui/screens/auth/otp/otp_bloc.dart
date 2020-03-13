@@ -1,14 +1,12 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:damilk_app/src/bloc/base_bloc.dart';
+import 'package:damilk_app/src/ui/screens/auth/phone/login_bloc.dart';
 import 'package:damilk_app/src/repository/remote/api/models/base_response.dart';
-import 'package:damilk_app/src/repository/remote/api/models/client/client_auth_model.dart';
-import 'package:damilk_app/src/repository/remote/api/models/request_otp_response.dart';
+import 'package:damilk_app/src/repository/remote/api/models/client/user_model.dart';
 import 'package:damilk_app/src/repository/damilk_repository.dart';
 
-class OtpBloc extends BaseBloc {
-  final _repository = DamilkRepository();
+class OtpBloc extends AuthBloc {
 
   Timer timer;
   int currentTime = 0;
@@ -39,24 +37,6 @@ class OtpBloc extends BaseBloc {
         }
       });
     }
-  }
-
-  Future<BaseResponse<RequestOtpResponse>> requestOtp(String phone) async {
-    showProgress();
-    final result = await _repository.requestOtp(phone);
-    hideProgress();
-    return Future.value(result);
-  }
-
-  Future<AuthResult> signInWithCredential(AuthCredential credential) {
-    return _repository.signInWithCredential(credential);
-  }
-
-  Future<BaseResponse<ClientAuthModel>> login(String phone, String otp) async {
-    showProgress();
-    final result = await _repository.login(phone, otp);
-    hideProgress();
-    return Future.value(result);
   }
 
   void _stopTimer() {
