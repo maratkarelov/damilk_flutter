@@ -275,21 +275,11 @@ class OtpWidget extends State<OtpScreen> {
                         fontWeight: FontWeight.w600),
                   ),
                 ),
-//                Text(
-//                  textTimer,
-//                  textAlign: TextAlign.center,
-//                  style: TextStyle(
-//                      color: AppColors.solid_black,
-//                      fontSize: 14.sp(),
-//                      fontFamily: Const.FONT_FAMILY_NUNITO,
-//                      fontWeight: FontWeight.w600),
-//                ),
               ],
             ),
           ),
         ),
       );
-
     } else {
       return Container(
         padding: EdgeInsets.all(16.dp()),
@@ -355,11 +345,11 @@ class OtpWidget extends State<OtpScreen> {
     };
 
     PhoneVerificationCompleted verificationCompleted =
-        (AuthCredential phoneAuthCredential) {
+        (AuthCredential authCredential) {
       _bloc
-          .signInWithCredential(phoneAuthCredential)
+          .signInWithCredential(authCredential)
           .then((result) => _authCompleted());
-      print('Received phone auth credential: $phoneAuthCredential');
+      print('Received phone auth credential: $authCredential');
     };
 
     PhoneCodeSent codeSent =
@@ -375,12 +365,27 @@ class OtpWidget extends State<OtpScreen> {
       print("auto retrieval timeout");
     };
 
-    _bloc.verifyPhoneNumber(_arguments.formattedPhone, codeAutoRetrievalTimeout, codeSent,
-        verificationCompleted, verificationFailed);
-  }
-  _authCompleted() {
-    Navigator.of(context).pushNamedAndRemoveUntil(
-        AppRoutes.REGISTRATION_SCREEN, (Route<dynamic> route) => false);
+    _bloc.verifyPhoneNumber(_arguments.formattedPhone, codeAutoRetrievalTimeout,
+        codeSent, verificationCompleted, verificationFailed);
   }
 
+  _authCompleted() async {
+    final response =
+        await _bloc.login(_bloc.getVerificationId ?? _arguments.verificationId);
+    if (response.isSuccessful()) {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          AppRoutes.REGISTRATION_SCREEN, (Route<dynamic> route) => false);
+    } else {
+      showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return ConfirmationDialog(
+              title: Strings.get(context, Strings.ERROR_HAPPEN),
+              description: response.message ??
+                  Strings.get(context, Strings.CHECK_CONNECTION),
+              bottomButtonText: Strings.get(context, Strings.GOOD),
+            );
+          });
+    }
+  }
 }

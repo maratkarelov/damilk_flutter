@@ -46,8 +46,6 @@ class DamilkRemoteRepository {
     BaseResponse<UserModel> convertedResponse;
     try {
       final response = await _apiProvider.login(token);
-      String jwt = response.data["data"]["token"];
-      convertedResponse.message = jwt;
       int statusCode = response.statusCode;
       if (statusCode == 0) {
         convertedResponse = BaseResponse(code: Const.NETWORK_CONNECTION);
@@ -58,6 +56,8 @@ class DamilkRemoteRepository {
         convertedResponse =
             BaseResponse.fromErrorJson(statusCode, response.data);
       }
+      String jwt = response.data["data"]["token"];
+      convertedResponse.message = jwt;
     } on DioError catch (e) {
       convertedResponse =
           BaseResponse(code: Const.NETWORK_CONNECTION, message: e.toString());

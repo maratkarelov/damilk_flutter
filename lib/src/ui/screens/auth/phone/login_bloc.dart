@@ -34,9 +34,9 @@ class AuthBloc extends BaseBloc {
     return _repository.signInWithCredential(credential);
   }
 
-  Future<BaseResponse<UserModel>> login(String token) async {
+  Future<BaseResponse<UserModel>> login(String verificationId) async {
     showProgress();
-    final result = await _repository.login(token);
+    final result = await _repository.login(verificationId);
     hideProgress();
     return Future.value(result);
   }
